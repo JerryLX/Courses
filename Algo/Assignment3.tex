@@ -1,0 +1,256 @@
+% !TeX spellcheck = en_US
+
+%
+% This is a borrowed LaTeX template file for lecture notes for CS267,
+% Applications of Parallel Computing, UCBerkeley EECS Department.
+% Now being used for CMU's 10725 Fall 2012 Optimization course
+% taught by Geoff Gordon and Ryan Tibshirani.  When preparing 
+% LaTeX notes for this class, please use this template.
+%
+% To familiarize yourself with this template, the body contains
+% some examples of its use.  Look them over.  Then you can
+% run LaTeX on this file.  After you have LaTeXed this file then
+% you can look over the result either by printing it out with
+% dvips or using xdvi. "pdflatex template.tex" should also work.
+%
+
+\documentclass[twoside]{article}
+\setlength{\oddsidemargin}{0.25 in}
+\setlength{\evensidemargin}{-0.25 in}
+\setlength{\topmargin}{-0.6 in}
+\setlength{\textwidth}{6.5 in}
+\setlength{\textheight}{8.5 in}
+\setlength{\headsep}{0.75 in}
+\setlength{\parindent}{0 in}
+\setlength{\parskip}{0.1 in}
+
+%
+% ADD PACKAGES here:
+%
+\usepackage{graphicx}
+\usepackage{amsmath,amsfonts,graphicx}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{lipsum}
+ \usepackage[margin=1in]{geometry} 
+\usepackage{amsthm,amssymb}
+\usepackage{bm}
+
+\usepackage{booktabs}
+%\renewcommand{\familydefault}{pag}
+%\renewcommand{\familydefault}{pbk}
+% https://en.wikibooks.org/wiki/LaTeX/Fonts
+
+%
+% The following commands set up the lecnum (lecture number)
+% counter and make various numbering schemes work relative
+% to the lecture number.
+%
+\newcounter{lecnum}
+\renewcommand{\thepage}{\thelecnum-\arabic{page}}
+\renewcommand{\thesection}{\thelecnum.\arabic{section}}
+\renewcommand{\theequation}{\thelecnum.\arabic{equation}}
+\renewcommand{\thefigure}{\thelecnum.\arabic{figure}}
+\renewcommand{\thetable}{\thelecnum.\arabic{table}}
+
+%
+% The following macro is used to generate the header.
+%
+\newcommand{\lecture}[7]{
+   \pagestyle{myheadings}
+   \thispagestyle{plain}
+   \newpage
+   \setcounter{lecnum}{#1}
+   \setcounter{page}{1}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{\vspace{2mm}
+    \hbox to 6.28in { {\bf Algorithm
+	\hfill Spring 2017} }
+       \vspace{4mm}
+       \hbox to 6.28in { {\Large \hfill Solution : #2  \hfill} }
+       \vspace{2mm}
+       \hbox to 6.28in { {\it Lecturer: #3 \hfill Homework taker: #4} }
+      \vspace{2mm}}
+   }
+   \end{center}
+   \markboth{Solution : #2}{Solution : #2}
+}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+		\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+%
+% Convention for citations is authors' initials followed by the year.
+% For example, to cite a paper by Leighton and Maggs you would type
+% \cite{LM89}, and to cite a paper by Strassen you would type \cite{S69}.
+% (To avoid bibliography problems, for now we redefine the \cite command.)
+% Also commands that create a suitable format for the reference list.
+\renewcommand{\cite}[1]{[#1]}
+\def\beginrefs{\begin{list}%
+        {[\arabic{equation}]}{\usecounter{equation}
+         \setlength{\leftmargin}{2.0truecm}\setlength{\labelsep}{0.4truecm}%
+         \setlength{\labelwidth}{1.6truecm}}}
+\def\endrefs{\end{list}}
+\def\bibentry#1{\item[\hbox{[#1]}]}
+
+%Use this command for a figure; it puts a figure in wherever you want it.
+%usage: \fig{NUMBER}{SPACE-IN-INCHES}{CAPTION}
+\newcommand{\fig}[3]{
+			\vspace{#2}
+			\begin{center}
+			Figure \thelecnum.#1:~#3
+			\end{center}
+	}
+% Use these for theorems, lemmas, proofs, etc.
+\newtheorem{theorem}{Theorem}[lecnum]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+%\newenvironment{proof}{{\bf Proof:}}{\hfill\rule{2mm}{2mm}}
+\newenvironment{solution}{{\bf Solution:}}{\hfill\rule{2mm}{2mm}}
+
+% **** IF YOU WANT TO DEFINE ADDITIONAL MACROS FOR YOURSELF, PUT THEM HERE:
+
+\newcommand\E{\mathbb{E}}
+
+\begin{document}
+%FILL IN THE RIGHT INFO.
+%\lecture{**LECTURE-NUMBER**}{**DATE**}{**LECTURER**}{**SCRIBE**}
+\lecture{2}{Assignment 3}{Li Guoqiang}{Yu Han}
+
+
+
+ % \textbf{Notification:} You can take 5 problems randomly from all of 15 problems except the problem you design.
+  \textbf{Due Time:}May 11
+
+\begin{problem}{1}
+	Prove the Konig theorem: Let $G$ be bipartite, then cardinality of maximum matching = cardinality of minimum vertex cover.
+\end{problem}
+
+\begin{solution}
+	
+	We use $C_{match}$ donates the cardinality of maximum matching and  $C_{cover}$ donates the cardinality of minimum vertex cover.
+		
+	$M$ is a maximum matching for $G$. Then no vertex in a vertex cover can cover more than one edge of M, for M is a set of edges no two of which share an endpoint. Thus:
+	$$
+	C_{cover} \ge |M| = C_{match}
+	$$
+	
+	Let vertex set $V$ be partitioned into left set $L$ and right set $R$.
+	let $U$ be the set of unmatched vertices in $L$ (possibly empty), and let $Z$ be the set of vertices that are either in $U$ or are connected to $U$ by alternating paths (paths that alternate between edges that are in the matching and edges that are not in the matching). Let 
+	$$
+	K = (L \setminus Z) \cup (R \cap Z)
+	$$
+	
+	$K$ forms a vertex cover and every vertex in $K$ is an endpoint of a matched edge. Thus:
+	$$
+	C_{cover} \le C_{match}
+	$$
+	
+	Thus:
+	$$
+	C_{cover} = C_{match}
+	$$
+\end{solution}
+
+\begin{problem}{2}
+	Use layering to get a factor $f$ approximation algorithm for set cover, where $f$ is the frequency of the most frequent element. Provide a tight example for this algorithm.
+\end{problem} 
+\begin{solution}
+
+1.$\mathcal{S}_0 = \mathcal{S}, C = \emptyset, i=0$
+
+2.Remove $S$ where $S \cap U = \emptyset$, say this set is $\mathcal{S}_i$
+
+3.Compute $c = min\{w(S)/|S|\}$ for all $S \in \mathcal{S}_i$
+
+4.Let $t_i(S) = c \cdot |S|$ and $w(S) = w(S) - t_i(S)$ for all $S \in \mathcal{S}_i$
+
+5.Let $W_i = \{S \in \mathcal{S}_i | w(S) = 0\}, C = C \cup W_i$
+
+6.Let $U=U/\bigcup_{S\in W_i}$, Increase $i$ by 1 and goto step 2 until $U$ is empty set.
+	
+	
+	Tight Example:
+	$S_1 = S_2 = \cdots = S_m = U$. The optimistic solution will choose only one subset, and the approximate solution will choose all the subsets.
+\end{solution}
+
+\begin{problem}{3}
+	Given an undirected graph. The problem is to remove a minimum number of edges such
+	that the residual graph contains no triangle. (I.e., there is no three vertices a, b, c such that edges
+	(a, b),(b, c),(c, a) are all in the residual graph.) Give a factor 3 approximation algorithm.
+\end{problem}
+
+\begin{solution}
+
+Repeatedly search the graph $G$. If there is a triangle (u,v,w), remove edge (u,v),(v,w) and (u,w) from $G$.
+
+\end{solution}
+
+\begin{problem}{4}
+	Given n points in $\mathbb{R}^2$
+	, define the optimal Euclidean Steiner tree to be a minimum length tree
+	containing all n points and any other subset of points from $\mathbb{R}^2$
+	. Prove that each of the additional
+	points must have degree three, with all three angles being 120◦	.
+
+\end{problem} 
+\begin{solution}
+	
+	If a additional point has degree one, this additional point is obviously redundant.
+	
+	If a additional point has degree two,  this additional point is also redundant for	triangle inequality.
+	
+	If a additional point has degree more than two, it should be Fermat points or else we always could construct a smaller Steiner tree.
+
+\end{solution}
+
+\begin{problem}{5}
+Consider a more restricted algorithm than First-Fit, called Next-Fit, which tries to pack the next
+item only in the most recently started bin. If it does not fit, it is packed in a new bin. Show that this
+algorithm also achieves factor 2. Give a factor 2 tight example.
+\end{problem} 
+
+\begin{solution}
+	
+	Suppose we have a set $I = \{1,2,...,n\}$ of items and each item is of size $s(i) \in (0,1]$. Let $k$ be the number of bins found by NEXT-Fit and the corresponding assignment is denoted by $A:I\rightarrow\{1,2,...k\}$. Let $k^\star$ be the optimal solution.
+	
+	$$
+	k^\star \ge \lceil \sum_{i\in I}s(i)\rceil
+	$$
+	For bins $j = 1,2,...,\lfloor k/2 \rfloor$, we have
+	$$
+	\sum_{i:A(i)\in \{2j-1,2j\}}s(i) > 1
+	$$
+	Combining inequalities:
+	$$
+	\lfloor \frac{k}{2} \rfloor < \sum_{i\in I}s(i)
+	$$
+	Thus
+	$$
+	\frac{k-1}{2} \le \lfloor\frac{k}{2}\rfloor\le\lceil\sum_{i\in I}s(i)\rceil-1
+	$$
+	$$
+	k \le 2 \cdot \lceil\sum_{i\in I}s(i)\rceil-1\le 2\cdot k^\star -1
+	$$
+\end{solution}
+
+\begin{problem}{6}
+Given an undirected complete graph, each edge is assigned with a nonnegative cost by the function $c$. Find a Hamilton cycle with the largest cost by the greedy approach, and prove the guarantee factor
+is 2.
+
+\end{problem} 
+\begin{solution}
+	
+Find the max spanning tree $T$ of graph $G$. By doubling its edges we obtain
+an Eulerian graph connecting all vertices. Find an Euler tour of this graph, for example by traversing the edges in DFS (depth first search) order. Next obtain a Rudrata cycle by traversing the Euler tour and short-cutting vertices and previously visited vertices
+\end{solution}
+\end{document}

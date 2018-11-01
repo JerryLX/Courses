@@ -1,0 +1,276 @@
+% !TeX spellcheck = en_US
+
+%
+% This is a borrowed LaTeX template file for lecture notes for CS267,
+% Applications of Parallel Computing, UCBerkeley EECS Department.
+% Now being used for CMU's 10725 Fall 2012 Optimization course
+% taught by Geoff Gordon and Ryan Tibshirani.  When preparing 
+% LaTeX notes for this class, please use this template.
+%
+% To familiarize yourself with this template, the body contains
+% some examples of its use.  Look them over.  Then you can
+% run LaTeX on this file.  After you have LaTeXed this file then
+% you can look over the result either by printing it out with
+% dvips or using xdvi. "pdflatex template.tex" should also work.
+%
+
+\documentclass[twoside]{article}
+\setlength{\oddsidemargin}{0.25 in}
+\setlength{\evensidemargin}{-0.25 in}
+\setlength{\topmargin}{-0.6 in}
+\setlength{\textwidth}{6.5 in}
+\setlength{\textheight}{8.5 in}
+\setlength{\headsep}{0.75 in}
+\setlength{\parindent}{0 in}
+\setlength{\parskip}{0.1 in}
+
+%
+% ADD PACKAGES here:
+%
+\usepackage{graphicx}
+\usepackage{amsmath,amsfonts,graphicx}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{lipsum}
+ \usepackage[margin=1in]{geometry} 
+\usepackage{amsthm,amssymb}
+\usepackage{bm}
+
+\usepackage{booktabs}
+%\renewcommand{\familydefault}{pag}
+%\renewcommand{\familydefault}{pbk}
+% https://en.wikibooks.org/wiki/LaTeX/Fonts
+
+%
+% The following commands set up the lecnum (lecture number)
+% counter and make various numbering schemes work relative
+% to the lecture number.
+%
+\newcounter{lecnum}
+\renewcommand{\thepage}{\thelecnum-\arabic{page}}
+\renewcommand{\thesection}{\thelecnum.\arabic{section}}
+\renewcommand{\theequation}{\thelecnum.\arabic{equation}}
+\renewcommand{\thefigure}{\thelecnum.\arabic{figure}}
+\renewcommand{\thetable}{\thelecnum.\arabic{table}}
+
+%
+% The following macro is used to generate the header.
+%
+\newcommand{\lecture}[7]{
+   \pagestyle{myheadings}
+   \thispagestyle{plain}
+   \newpage
+   \setcounter{lecnum}{#1}
+   \setcounter{page}{1}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{\vspace{2mm}
+    \hbox to 6.28in { {\bf Machine Learning
+	\hfill Spring 2017} }
+       \vspace{4mm}
+       \hbox to 6.28in { {\Large \hfill Solution : #2  \hfill} }
+       \vspace{2mm}
+       \hbox to 6.28in { {\it Lecturer: #3 \hfill Homework taker: #4} }
+      \vspace{2mm}}
+   }
+   \end{center}
+   \markboth{Solution : #2}{Solution : #2}
+}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+		\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+%
+% Convention for citations is authors' initials followed by the year.
+% For example, to cite a paper by Leighton and Maggs you would type
+% \cite{LM89}, and to cite a paper by Strassen you would type \cite{S69}.
+% (To avoid bibliography problems, for now we redefine the \cite command.)
+% Also commands that create a suitable format for the reference list.
+\renewcommand{\cite}[1]{[#1]}
+\def\beginrefs{\begin{list}%
+        {[\arabic{equation}]}{\usecounter{equation}
+         \setlength{\leftmargin}{2.0truecm}\setlength{\labelsep}{0.4truecm}%
+         \setlength{\labelwidth}{1.6truecm}}}
+\def\endrefs{\end{list}}
+\def\bibentry#1{\item[\hbox{[#1]}]}
+
+%Use this command for a figure; it puts a figure in wherever you want it.
+%usage: \fig{NUMBER}{SPACE-IN-INCHES}{CAPTION}
+\newcommand{\fig}[3]{
+			\vspace{#2}
+			\begin{center}
+			Figure \thelecnum.#1:~#3
+			\end{center}
+	}
+% Use these for theorems, lemmas, proofs, etc.
+\newtheorem{theorem}{Theorem}[lecnum]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+%\newenvironment{proof}{{\bf Proof:}}{\hfill\rule{2mm}{2mm}}
+\newenvironment{solution}{{\bf Solution:}}{\hfill\rule{2mm}{2mm}}
+
+% **** IF YOU WANT TO DEFINE ADDITIONAL MACROS FOR YOURSELF, PUT THEM HERE:
+
+\newcommand\E{\mathbb{E}}
+
+\begin{document}
+%FILL IN THE RIGHT INFO.
+%\lecture{**LECTURE-NUMBER**}{**DATE**}{**LECTURER**}{**SCRIBE**}
+\lecture{1}{Homework 1}{Yang Yang}{Li Xu}
+
+
+
+ % \textbf{Notification:} You can take 5 problems randomly from all of 15 problems except the problem you design.
+  \textbf{Due Time:}March 12
+
+\begin{problem}{1}
+	For parameter w, try to prove that logistic regression function $y=\frac{1}{1+e^{-(\bm{w^Tx}+b)}}$ is non-convex, but its logarithmic likelihood function $l(\bm{w})=\sum_{i=1}^m(-y_i(\bm{w^Tx_i}+b)+\ln(1+e^{\bm{w^Tx_i}+b}))$ is convex.
+\end{problem}
+
+\begin{solution}
+	To prove $y=\frac{1}{1+e^{-(\bm{w^Tx}+b)}}$ is non-convex, we just need to prove $g(z)=\frac{1}{1+e^{-z}}$ is non-convex as $z=\bm{w^Tx}+b$ is linear.
+	
+	\begin{proof}
+		$g(z)=\frac{1}{1+e^{-z}}$ is non-convex
+	\end{proof}
+	
+	\begin{align*}
+		g'(z) &= \frac{d}{dz}\frac{1}{1+e^{-z}} \\
+			  &= \frac{1}{1+e^{-z}}(1-\frac{1}{1+e^{-z}}) \\
+			  &= g(z)(1-g(z))
+	\end{align*}
+	\begin{align*}
+	g''(z) &= \frac{d}{dz}g(z) \\
+		&= g'(z)(1-g(z))-g(z)g'(z) \\
+		&= g'(z) - 2g(z)g'(z) \\
+		&= g(z)(1-g(z))(1-2g(z))
+	\end{align*}
+	As the range of g(z) is from $(0,+\infty)$, g''(z)  is not constant greater than 0. So $g(z)=\frac{1}{1+e^{-z}}$ is non-convex. 
+	
+	Similarly, to prove $l(\bm{w})=\sum_{i=1}^m(-y_i(\bm{w^Tx_i}+b)+\ln(1+e^{\bm{w^Tx_i}+b}))$ is convex, we just need to prove $\ln(1+e^{z})$ is convex as both $-y_i(\bm{w^Tx_i}+b$ and $\bm{w^Tx_i}+b$ is linear to $\bm{w}$.
+	
+	\begin{proof}
+		$g(z) = \ln(1+e^{z})$ is convex
+	\end{proof}
+	$$
+	g'(z) = \frac{d}{dz}\ln(1+e^{z}) 
+		= \frac{e^{z}}{1+e^{z}}
+	$$
+	
+	$$	g''(z) = \frac{d}{dz}\frac{e^{z}}{1+e^{z}} 
+		= \frac{e^z(1+e^z) - e^{2z}}{(1+e^z)^2} 
+		= \frac{e^z}{(1+e^z)^2} >0
+	$$
+\end{solution}
+
+\begin{problem}{2}
+	Using the technique of Lagrange multipliers, show that minimization of the regularized error function\\
+	\begin{align*}
+	\frac{1}{2}\sum_{n=1}^N\{t_n-\bm{w^T\phi}(x_n)\}^2+\frac{\lambda}{2}\sum_{j=1}^M|w_j|^q
+	\end{align*}
+	is equivalent to minimizing the unregularized sum-of-squares error\\
+	\begin{align*}
+	E_D(\bm{w})=\frac{1}{2}\sum_{n=1}^N\{t_n-\bm{w^T\phi}(x_n)\}^2
+	\end{align*}
+	subject to the constraint $\sum_{j=1}^M|w_j|^q\le \eta$.Discuss the relationship between the parameters $\eta$ and $\lambda$.
+\end{problem} 
+\begin{solution}
+	We first define $E(\bm{w})=	\frac{1}{2}\sum_{n=1}^N\{t_n-\bm{w^T\phi}(x_n)\}^2+\frac{\lambda}{2}\sum_{j=1}^M|w_j|^q$
+	
+	To minimize $E(\bm{w})$, we have
+	$$
+	\frac{\partial E}{\partial \bm{w}} = 0
+	$$
+	
+	To minimize $E_D(\bm{w})$ subject to $\sum_{j=1}^M|w_j|^q\le \eta$. We define:
+	$$
+	g(\bm{w}) = \frac{1}{2}(\sum_{j=1}^M|w_j|^q - \eta)
+	$$
+	Using Lagrange multipliers, let 
+	$$L(\bm{w}, \lambda) = E_D(\bm{w})+\lambda \cdot g(\bm{w})$$
+	and solve
+	$$
+	\nabla_{\bm{w}}L(\bm{w}, \lambda) = 0
+	$$
+	with $\lambda \cdot g(\bm{w}) = 0$.
+	
+	As $L(\bm{w}, \lambda) = E(\bm{w} - \lambda \eta)$ and $\lambda \eta$ is not relevant to $\bm{w}$.
+	
+	$$\nabla_{\bm{w}}L(\bm{w}, \lambda) = 0$$ 
+	is equivalent to 
+	$$\frac{\partial E}{\partial \bm{w}} = 0$$
+	So minimize $E(\bm{w})$ is equivalent to minimize $E_D(\bm{w})$ subject to $\sum_{j=1}^M|w_j|^q\le \eta$.
+	
+	For the relationship between $\lambda$ and $\eta$. As we have $\lambda \cdot g(\bm{w}) = 0$, if $\lambda \ne 0$, $\eta = \sum_{j=1}^M|w_j|^q$.
+\end{solution}
+
+\begin{problem}{3}
+	Consider a data set in which each data point $t_n$ is associated with a weighting factor $r_n > 0$, so that the sum-of-squares error function becomes $$E_D(\mathbf{w}) = \frac{1}{2} \sum_{n=1}^N r_n \{t_n - \mathbf{w}^T\phi(\mathbf{x}_n)\}^2.$$ where $\phi(\mathbf{x}_n)$ is basis function.  Find an expression for the solution $\mathbf{w}^*$ that minimizes this error function. 
+\end{problem}
+\begin{solution}
+	To minimize $$E_D(\mathbf{w}) = \frac{1}{2} \sum_{n=1}^N r_n \{t_n - \mathbf{w}^T\phi(\mathbf{x}_n)\}^2.$$
+	
+	$\mathbf{w}$ should satisfy:
+	$$
+	\frac{\partial}{\partial \mathbf{w}} E_D(\mathbf{w}) = - \sum_{n=1}^N r_n \{t_n - \mathbf{w}^T\phi(\mathbf{x}_n)\}\phi(\mathbf{x}_n) = 0
+	$$
+	Solve for $\mathbf{w}$:
+	\begin{align*}
+	\sum_{n=1}^N r_n t_n \phi(\mathbf{x}_n) &= (\sum_{n=1}^N r_n \phi(\mathbf{x}_n) \phi(\mathbf{x}_n)^T)\mathbf{w} \\
+				\mathbf{w} &= (\sum_{n=1}^N r_n \phi(\mathbf{x}_n) \phi(\mathbf{x}_n)^T)^{-1} (\sum_{n=1}^N r_n t_n \phi(\mathbf{x}_n))
+	\end{align*}
+
+\end{solution}
+
+\begin{problem}{4}
+	......
+\end{problem}
+
+\begin{solution}
+We define $\mu_{ic} = P(y_i = c | x_i, W), y_{ic} =1 \{y_i = c\}$
+
+(a)
+$$
+l(W) = log \prod_{i=1}^{n} \prod_{c=1}^{C} y_{ic}log \mu_{ic} = \sum_{i=1}^{n}(\sum_{c=1}^{C}y_{ic}w_c^T x_i - log\sum_{c'=1}^{C}exp(w_{c'}^T x_i))
+$$
+
+(b)
+\begin{align*}
+g_c(W) &= \frac{\partial}{\partial w_c}\sum_{i=1}^{n}(\sum_{c=1}^{C} y_{ic}w_c^Tx_i - log\sum_{c'=1}^{C} exp(w_{c'}^T x_i)) \\
+&= \sum_{i=1}^{n}(\frac{\partial}{\partial w_c}\sum_{c=1}^{C}y_{ic}w_c^Tx_i - \frac{\partial}{\partial w_c} log\sum_{c'=1}^{C}exp(w_{c'}^Tx_i)) \\
+&= \sum_{i=1}^{n}(y_{ic}x_i - \frac{\frac{\partial}{\partial w_c} \sum_{c'=1}^{C}exp(w_{c'}^T x_i)}{\sum_{c'=1}^{C} exp(w_{c'}^Tx_i)}) \\
+&=  \sum_{i=1}^{n}(y_{ic}x_i - \frac{exp(w_{c}^Tx_i)x_i}{\sum_{c'=1}^{C} exp(w_{c'}^Tx_i)}) \\
+&= \sum_{i=1}^{n}(y_{ic}-\mu_{ic})x_i
+\end{align*}
+
+(c) $\delta_{cc'}$ denotes the Dirac delta function and is equal to one if $c' = c$ and zero otherwise.
+
+\begin{align*}
+H_{c,c'}(W) &= \frac{\partial}{\partial w_c}g_{c'}(W) \\
+&= \frac{\partial}{\partial w_c} \sum_{i=1}^{n}(y_{ic'}x_i - \frac{exp(w_{c'}^Tx_i)x_i}{\sum_{c''=1}^{C} exp(w_{c''}^T x_i)})\\
+&= - \sum_{i=1}^{n}\frac{\partial}{\partial w_c} \frac{exp(w_{c'}^T x_i)x_i}{\sum_{c''=1}^{C} exp(w_{c''}^Tx_i)} \\
+&= - \sum_{i=1}^{n}(\delta_{cc'}\mu_{ic'}\mu_{ic})x_i x_i^T\\
+&=  \sum_{i=1}^{n}\mu_{ic}(\mu_{ic'}-\delta_{cc'})x_i x_i^T
+\end{align*}
+	
+\end{solution}
+
+\begin{problem}{5}
+	......
+\end{problem}
+
+\begin{solution}
+	program is in the folder "B16037910007-LiXu-hw1-program"
+	using 1. Stochastic Gradient Descent 2. Batch Gradient Ascent Method 3. Newton’s method 4. Normal Equation
+	
+	comparing RMSE: Normal Equation has best result.
+\end{solution}
+\end{document}

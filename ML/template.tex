@@ -1,0 +1,299 @@
+% !TeX spellcheck = en_US
+
+%
+% This is a borrowed LaTeX template file for lecture notes for CS267,
+% Applications of Parallel Computing, UCBerkeley EECS Department.
+% Now being used for CMU's 10725 Fall 2012 Optimization course
+% taught by Geoff Gordon and Ryan Tibshirani.  When preparing 
+% LaTeX notes for this class, please use this template.
+%
+% To familiarize yourself with this template, the body contains
+% some examples of its use.  Look them over.  Then you can
+% run LaTeX on this file.  After you have LaTeXed this file then
+% you can look over the result either by printing it out with
+% dvips or using xdvi. "pdflatex template.tex" should also work.
+%
+
+\documentclass[twoside]{article}
+\setlength{\oddsidemargin}{0.25 in}
+\setlength{\evensidemargin}{-0.25 in}
+\setlength{\topmargin}{-0.6 in}
+\setlength{\textwidth}{6.5 in}
+\setlength{\textheight}{8.5 in}
+\setlength{\headsep}{0.75 in}
+\setlength{\parindent}{0 in}
+\setlength{\parskip}{0.1 in}
+
+%
+% ADD PACKAGES here:
+%
+\usepackage{graphicx}
+\usepackage{amsmath,amsfonts,graphicx}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{lipsum}
+
+\usepackage{booktabs}
+%\renewcommand{\familydefault}{pag}
+%\renewcommand{\familydefault}{pbk}
+% https://en.wikibooks.org/wiki/LaTeX/Fonts
+
+%
+% The following commands set up the lecnum (lecture number)
+% counter and make various numbering schemes work relative
+% to the lecture number.
+%
+\newcounter{lecnum}
+\renewcommand{\thepage}{\thelecnum-\arabic{page}}
+\renewcommand{\thesection}{\thelecnum.\arabic{section}}
+\renewcommand{\theequation}{\thelecnum.\arabic{equation}}
+\renewcommand{\thefigure}{\thelecnum.\arabic{figure}}
+\renewcommand{\thetable}{\thelecnum.\arabic{table}}
+
+%
+% The following macro is used to generate the header.
+%
+\newcommand{\lecture}[7]{
+   \pagestyle{myheadings}
+   \thispagestyle{plain}
+   \newpage
+   \setcounter{lecnum}{#1}
+   \setcounter{page}{1}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{\vspace{2mm}
+    \hbox to 6.28in { {\bf Neural Network Theory and Applications
+	\hfill Spring 2017} }
+       \vspace{4mm}
+       \hbox to 6.28in { {\Large \hfill Solution : #2  \hfill} }
+       \vspace{2mm}
+       \hbox to 6.28in { {\it Lecturer: #3 \hfill Homework taker: #4} }
+      \vspace{2mm}}
+   }
+   \end{center}
+   \markboth{Solution #1: #2}{Solution #1: #2}
+}
+
+%
+% Convention for citations is authors' initials followed by the year.
+% For example, to cite a paper by Leighton and Maggs you would type
+% \cite{LM89}, and to cite a paper by Strassen you would type \cite{S69}.
+% (To avoid bibliography problems, for now we redefine the \cite command.)
+% Also commands that create a suitable format for the reference list.
+\renewcommand{\cite}[1]{[#1]}
+\def\beginrefs{\begin{list}%
+        {[\arabic{equation}]}{\usecounter{equation}
+         \setlength{\leftmargin}{2.0truecm}\setlength{\labelsep}{0.4truecm}%
+         \setlength{\labelwidth}{1.6truecm}}}
+\def\endrefs{\end{list}}
+\def\bibentry#1{\item[\hbox{[#1]}]}
+
+%Use this command for a figure; it puts a figure in wherever you want it.
+%usage: \fig{NUMBER}{SPACE-IN-INCHES}{CAPTION}
+\newcommand{\fig}[3]{
+			\vspace{#2}
+			\begin{center}
+			Figure \thelecnum.#1:~#3
+			\end{center}
+	}
+% Use these for theorems, lemmas, proofs, etc.
+\newtheorem{theorem}{Theorem}[lecnum]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newenvironment{proof}{{\bf Proof:}}{\hfill\rule{2mm}{2mm}}
+\newenvironment{solution}{{\bf Solution:}}{\hfill\rule{2mm}{2mm}}
+
+% **** IF YOU WANT TO DEFINE ADDITIONAL MACROS FOR YOURSELF, PUT THEM HERE:
+
+\newcommand\E{\mathbb{E}}
+
+\begin{document}
+%FILL IN THE RIGHT INFO.
+%\lecture{**LECTURE-NUMBER**}{**DATE**}{**LECTURER**}{**SCRIBE**}
+\lecture{1}{Assignment1}{Baoliang Lu}{Long Chen}
+
+
+
+ % \textbf{Notification:} You can take 5 problems randomly from all of 15 problems except the problem you design.
+  \textbf{Due Time:}March 12
+
+ \section*{Problem 1}
+
+\begin{solution}
+To conveniently present the proof we will first introduce some new notation, combine the weight matrix and the bias into a single vector:
+$$
+x=\begin{bmatrix} W\\b\end{bmatrix}\quad
+$$
+
+Then, augment the input vectors with a number:1, corresponding to the bias input:
+$$
+z_q=\begin{bmatrix} p_q\\1\end{bmatrix}\quad
+$$
+The net input to the neuron is as follows:
+$$
+W^Tp+b=x^Tz
+$$
+The perceptron learning rule for a single-neuron perceptron can be written as:
+$$
+x^{new}=x^{old}+e\alpha z,where \quad e=0,-1,1
+$$ 
+We focus on the iterations whose weight vector is changed.
+$$
+x(k)=x(k-1)+\alpha z'(k-1)
+$$
+Where $z'(k-1)$ is the appropriate member of the set:
+$$
+\{-z_1,-z_2,...,-z_Q,z_1,z_2,...,z_Q\}
+$$
+Assume that a weight vector exists that can correctly categorize all input vectors. This solution will be denoted $x^*$. For this weight vector, we will assume that
+$$
+{x^*}^T>\delta>0 \quad if \quad t_q =1
+$$
+and 
+$$
+{x^*}^T<-\delta<0 \quad if \quad t_q =0
+$$
+
+Without loss of generality, assume that the algorithm is initialized with the zero weight vector:
+$$
+x(0)=0
+$$
+After $k$ iterations, we have:
+$$
+x(k)=x(k-1)+\alpha z'(k-1)=\alpha z'(0)+\alpha z'(1)+\dots+\alpha z'(k-1)
+$$
+Take the inner product of the solution weight vector with the weight vector at iteration $k$ we obtain:
+$$
+{x^*}^Tx(k)=\alpha{x^*}^Tz'(0)+\alpha{x^*}^Tz'(1)+\dots+\alpha{x^*}^Tz'(k-1)
+$$
+We can get from above that,
+$$
+{x^*}^Tz'(i)>\alpha\delta
+$$
+Therefore,
+$$
+{x^*}^Tx(k)>k\alpha\delta
+$$
+From the Cauchy-Schwartz inequality,
+$$
+({x^*}^Tx(k))^2\leq {||x^*||}^2{||x(k)||}^2
+$$
+Where
+$$
+||x||^2=x^Tx
+$$
+The lower bound on the squared length of the weight vector at iteration k:
+$$
+{||x(k)||}^2\geq \frac{{{x^*}^Tx(k)}^2}{{||x^*||}^2}>\frac{(k\alpha\delta)^2}{{||x^*||}^2}
+$$
+Next we want to find an upper bound for the length of the weight vector.
+We begin by finding the change in the length at iteration $k$:
+
+\begin{align*}
+& {||x(k)||}^2=x^T(k)x(k) \\
+& =[x(k-1)+z'(k-1)]^T[x(k-1)+z'(k-1)] \\
+& =||x(k-1)||^2+2\alpha x^T(k-1)z'(k-1)+\alpha^2||z'(k-1)||^2
+\end{align*}
+Because we only cares about the iterations whose weight vector can not separate the samples correctly, we have:
+$$
+x^T(k-1)z'(k-1)\leq 0
+$$
+We have:
+\begin{align*}
+& {||x(k)||}^2 \leq {||x(k-1)||}^2+\alpha^2||z'(k-1)||^2\\
+& \leq \alpha^2||z'(0)||^2+\alpha^2||z'(1)||^2 +\dots+\alpha^2||z'(k-1)||^2\\
+\end{align*}
+If we denote $\Pi = \max{||z'(i)||^2}$, the above upper bound can be simplified to:
+$$
+ {||x(k)||}^2 \leq k\alpha^2 \Pi
+$$
+If we combine the two inequalities we find:
+$$
+k\Pi\geq\frac{||x(k)||^2}{\alpha^2}>\frac{(k\delta)^2}{||x^*||^2} \quad or \quad k<\frac{\Pi ||X^*||^2}{\delta^2}
+$$
+Because $k$ has an upper bound, this means that the weights will only be changed a finite number of times. Therefore, the perceptron learning rule will converge in a finite number of iterations.
+
+Moreover, because we never care about the relation of $k$ and $\alpha$ in the whole process of proof, there is no limitation about the learning rate.
+\end{solution}
+
+
+\section*{Problem 2}
+\begin{solution}
+In this problem, I separate the classification problem into two phases. By using the $hardlim$ function, I first tell the class 1 out of class 2 and class 3 out. Then the same method is used to separate class 2 and class 3.
+
+The code in in the folder Problem2.
+
+The result is as follows:
+
+
+\end{solution}
+
+\section*{Problem 3}
+\begin{solution}
+	
+Matlab2013a
+
+main.m:  the file which need to be run. Almost all of the code are here. In this file, I firstly load the data from those two text files. And then training the network in two modes. 
+
+sigmoid.m:   sigmoid function
+
+sigmoidD.m:  the derivation of sigmoid function
+
+testAccuracy.m:  test the network using the data in test file and draw the image of result. 
+
+The neural network has 3 layers, input layer, hidden layer and output layer. Input layer has 2 units, hidden layer has 10 units and output layer has 1 unit.
+
+Firstly in the forward pass, each neuron are computed as above. And use cost function as follows:
+$$
+J(u,v,b)=\frac{1}{m}\sum_{i=1}^{m}(\frac{1}{2}||h_{u,v,b}(x_i)-y_i||^2)
+$$
+Where $J(u,v,b)$ is the bias (or cost) of the network, $h_(u,v,b)(x_i)$ is the $i$-th element of the output layer and $y_i$ is the ith target output.
+
+Secondly, in the backward pass, I use gradient descent to update the weights of each layer.
+$$
+u_i=u_i-\alpha\frac{\partial J(u,v,b)}{\partial u_i}
+$$
+$$
+v_i=v_i-\alpha\frac{\partial J(u,v,b)}{\partial v_i}
+$$
+$$
+b_i=b_i-\alpha\frac{\partial J(u,v,b)}{\partial b_i}
+$$
+Where $\alpha$ is the learning rate. In order to compute the partial derivation of the element, I use some mathematical methods to compute deduce the result. The detailed derivation process is not write down here.
+
+The neural network is solved by two modes, batch mode and online learning mode. In the batch mode weights are updated after each epoch only. It can be computed easily using the powerful matrix of linear algebra. And in the online learning mode, the weights are updated after presenting each training example.
+
+In the batch mode I use a threshold to make the loop stop while in the online learning mode just let it loop for 20000 times (otherwise the cost function need to be recomputed to each single sample).
+
+In both modes the program gives the accuracy of the network and draw the spiral image of the results (use different color to denote different label). 
+
+The result images are as above.
+
+ 
+
+The result is showed as follows:
+\begin{table}[!hbp]
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		learning rate & 0.2 & 0.5 & 0.8 & 1  \\
+		\hline
+		on-line(train time) & 19.1s & 23.2s & 29.8s & 16.4s \\
+		\hline
+		batch(train time) & 13.2s & 22.1s & 10.5s & l8.5s\\
+		\hline
+		on-line(generalization) & 93.75\% & 98.27\% & 100\% & 100\% \\
+		\hline
+		batch(generalization) & 97.74\%s & 99.81\% & 99.21\% & 100\% \\
+		\hline
+	\end{tabular}
+	\caption{Results}
+\end{table} 
+
+
+\end{solution}
+\end{document}

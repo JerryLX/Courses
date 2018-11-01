@@ -1,0 +1,244 @@
+% !TeX spellcheck = en_US
+
+%
+% This is a borrowed LaTeX template file for lecture notes for CS267,
+% Applications of Parallel Computing, UCBerkeley EECS Department.
+% Now being used for CMU's 10725 Fall 2012 Optimization course
+% taught by Geoff Gordon and Ryan Tibshirani.  When preparing 
+% LaTeX notes for this class, please use this template.
+%
+% To familiarize yourself with this template, the body contains
+% some examples of its use.  Look them over.  Then you can
+% run LaTeX on this file.  After you have LaTeXed this file then
+% you can look over the result either by printing it out with
+% dvips or using xdvi. "pdflatex template.tex" should also work.
+%
+
+\documentclass[twoside]{article}
+\setlength{\oddsidemargin}{0.25 in}
+\setlength{\evensidemargin}{-0.25 in}
+\setlength{\topmargin}{-0.6 in}
+\setlength{\textwidth}{6.5 in}
+\setlength{\textheight}{8.5 in}
+\setlength{\headsep}{0.75 in}
+\setlength{\parindent}{0 in}
+\setlength{\parskip}{0.1 in}
+
+%
+% ADD PACKAGES here:
+%
+\usepackage{graphicx}
+\usepackage{amsmath,amsfonts,graphicx}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{lipsum}
+ \usepackage[margin=1in]{geometry} 
+\usepackage{amsthm,amssymb}
+\usepackage{bm}
+\usepackage{enumerate}
+\usepackage{booktabs}
+%\renewcommand{\familydefault}{pag}
+%\renewcommand{\familydefault}{pbk}
+% https://en.wikibooks.org/wiki/LaTeX/Fonts
+
+%
+% The following commands set up the lecnum (lecture number)
+% counter and make various numbering schemes work relative
+% to the lecture number.
+%
+\newcounter{lecnum}
+\renewcommand{\thepage}{\thelecnum-\arabic{page}}
+\renewcommand{\thesection}{\thelecnum.\arabic{section}}
+\renewcommand{\theequation}{\thelecnum.\arabic{equation}}
+\renewcommand{\thefigure}{\thelecnum.\arabic{figure}}
+\renewcommand{\thetable}{\thelecnum.\arabic{table}}
+
+%
+% The following macro is used to generate the header.
+%
+\newcommand{\lecture}[7]{
+   \pagestyle{myheadings}
+   \thispagestyle{plain}
+   \newpage
+   \setcounter{lecnum}{#1}
+   \setcounter{page}{1}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{\vspace{2mm}
+    \hbox to 6.28in { {\bf Computational Complexity 
+	\hfill Autumn, 2018} }
+       \vspace{4mm}
+       \hbox to 6.28in { {\Large \hfill Solution : #2  \hfill} }
+       \vspace{2mm}
+       \hbox to 6.28in { {\it Lecturer: #3 \hfill Homework taker: #4} }
+      \vspace{2mm}}
+   }
+   \end{center}
+   \markboth{Solution : #2}{Solution : #2}
+}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+		\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+%
+% Convention for citations is authors' initials followed by the year.
+% For example, to cite a paper by Leighton and Maggs you would type
+% \cite{LM89}, and to cite a paper by Strassen you would type \cite{S69}.
+% (To avoid bibliography problems, for now we redefine the \cite command.)
+% Also commands that create a suitable format for the reference list.
+\renewcommand{\cite}[1]{[#1]}
+\def\beginrefs{\begin{list}%
+        {[\arabic{equation}]}{\usecounter{equation}
+         \setlength{\leftmargin}{2.0truecm}\setlength{\labelsep}{0.4truecm}%
+         \setlength{\labelwidth}{1.6truecm}}}
+\def\endrefs{\end{list}}
+\def\bibentry#1{\item[\hbox{[#1]}]}
+
+%Use this command for a figure; it puts a figure in wherever you want it.
+%usage: \fig{NUMBER}{SPACE-IN-INCHES}{CAPTION}
+\newcommand{\fig}[3]{
+			\vspace{#2}
+			\begin{center}
+			Figure \thelecnum.#1:~#3
+			\end{center}
+	}
+% Use these for theorems, lemmas, proofs, etc.
+\newtheorem{theorem}{Theorem}[lecnum]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+%\newenvironment{proof}{{\bf Proof:}}{\hfill\rule{2mm}{2mm}}
+\newenvironment{solution}{{\bf Solution:}}{\hfill\rule{2mm}{2mm}}
+
+% **** IF YOU WANT TO DEFINE ADDITIONAL MACROS FOR YOURSELF, PUT THEM HERE:
+
+\newcommand\E{\mathbb{E}}
+
+\begin{document}
+%FILL IN THE RIGHT INFO.
+%\lecture{**LECTURE-NUMBER**}{**DATE**}{**LECTURER**}{**SCRIBE**}
+\lecture{1}{Homework 1}{Yuxi Fu}{Xu Li 018033210002}
+
+
+
+ % \textbf{Notification:} You can take 5 problems randomly from all of 15 problems except the problem you design.
+  %\textbf{Due Time:}March 12
+
+\begin{problem}{1.5}
+\end{problem}
+\begin{solution}
+Assume there is a k-tape TM $M$ accepts $L$ in time $T(n)$, we can construct a 2-tape TM $M'$ as follows
+\begin{itemize}
+	\item The $i^{th}$ location of the $j^{th}$ tape in $M$ corresponds to the $(i+jk)^{th}$ location of the work tape in $M'$.
+	\item For every symbol $a$ in $\Gamma_M$, there is two symbols $a$ and $\hat{a}$ in $\Gamma_{M'}$.
+	The symbol with $\hat{}$ indicates the the corresponding head of $M$ is positioned in that location.
+	\item Each step in $M$ corresponds to two sweeps in $M'$: first, it sweeps the tape in the left-to-right direction and records to its register the k symbols 	that are marked by $\hat{}$. Then $M'$ uses the transition function of $M$ to determine the new state, symbols, and head movements and sweeps the tape back in the right-to-left direction to update the encoding accordingly.
+\end{itemize}
+The head of $M'$ only depend on $n$ (the input length). Since the length of each tape in $M$ will not exceed $T(n)$, each step of $M'$ tasks $O(T(n))$ time.
+Since $M$ accepts $L$ in time $T(n)$, $M'$ accepts $L$ in time $O(T(n)^2)$ 
+\end{solution}
+
+\begin{problem}{1.6}
+\end{problem} 
+\begin{solution}
+	Given a k-tape TM $M$ accepts $L$ in time $T(n)$, we can construct a oblivious UTM $U$ as follows
+	\begin{itemize}
+		\item Create 5 tapes with 1 input tape (same as the input tape in $M$), 1 work tape to simulate all work tapes in $M$, 1 work tape to record the description of $M$ (transition functions), 1 work tape to record the current state of $M$ and 1 output tape.
+		\item Symbols in the same position of k tapes in $M$ are encoded into one symbol in $U$.
+		\item The work tape for simulation in $U$ is split into zones, where the range of zone $R_i$ is $[2^{i+1}-1,2^{i+2}-2]$, $L_i$ is $[-2^{i+2}+2,-2^{i+1}+1]$. The special symbol $\boxdot$ is used for buffer cells. A zone is empty if all of its cells are marked with $\boxdot$; half full if half of its cells are marked with $\boxdot$; full if none of its cells are marked with $\boxdot$.
+		\item $\forall i\in \{0,...,\log(T) \}: L_i$ is full $\Leftrightarrow R_i$ is empty;  $L_i$ is half full $\Leftrightarrow R_i$ is half full; $ L_i$ is empty $\Leftrightarrow R_i$ is full. And location 0 is always contains a non-$\boxdot$ symbol.
+		\item For each step in $M$, if the head is moved to the right, then move the corresponding tape to left, and the verse visa.
+	\end{itemize}
+\end{solution}
+Once a shift with index $i$ is performed, the next $2i-1$ shifts of that parallel tape will all have index less than i.
+Therefore there are at most $kT/2^i$ shifts with index $i$. And the total number of shifts equals to 
+$$
+\sharp(shift) = O\left( k\sum_{i=1}^{\log(T)} \frac{T}{2^i}2^i \right) = O(T(\log(T)))
+$$
+
+\begin{problem}{1.9}
+\end{problem}
+\begin{solution}
+	Assume a RAM TM $R$ computes a Boolean function $f$ in time $T(n)$, there are at most $T(n)$ time read and write operations.
+	We construct a TM $M$ as follows
+	\begin{itemize}
+		\item We use work tape $t_1$ to simulate array $A$, $t_2$ and $t_2$ to recored the relationship between address and the position of that address in $t_1$.
+		\item The $i^{th}$ address appears in $R$ corresponding to the $i^{th}$ position in $t_1$.
+		\item For read or write step in $R$, $M$ first find the corresponding position using $t_2$ and then move the head of $t_1$ to the right position and do the same thing as $R$.
+	\end{itemize}
+Since there are at most $T(n)$ addresses, the length of $t_1$ is at most $T(n)$. 
+Therefore it tasks $O(T(n))$ time to simulate read/write operation.
+So $M$ computes Boolean function $f$ in time $T(n)^2$, i.e., if a Boolean function $f$ is computable within time $T(n)$ (for some time constructible $T$) by a RAM TM, then it is in DTIME($T(n)^2$).
+\end{solution}
+
+\begin{problem}{1.13}
+\end{problem}
+
+\begin{solution}
+\begin{enumerate}[(a)]
+	\item $\text{BIT}(n,i) = \forall_{(i+C)^3 < x < (i+C+1)^3}:\text{PRIME}(x)\wedge (\forall_{(i+C)^3 < y < (i+C+1)^3}: \text{PRIME}(y) \wedge x \le y)\wedge \text{DIVIDE}(x,n)$
+	\item $\text{COMPARE}(n,m,i,j)=(\text{BIT}(m,i) \wedge \text{BIT}(n,j)) \vee(\neg\text{BIT}(m,i) \wedge \neg\text{BIT}(n,j) $
+	\item The configuration can be encoded using form
+	$$ \text{input} \ddagger \text{head} \ddagger \text{state} \ddagger$$
+	where $\ddagger \notin \Gamma$.
+	To add the new symbols, we map $0,1,\ddagger$ as follows
+	$$
+	0 \longmapsto 00, 1 \longmapsto 01, \ddagger \longmapsto 11
+	$$
+	We use 0 to denote the initial state $q_{start}$ and use 1 to denote the halt state $q_{halt}$.
+	We let $head=1^n$ if head is on th $n^{th}$ position and
+	$state=1^n$ is $q=n$.
+	\item We let $\text{D1}(p,n)/\text{D2}(p,n)/\text{D3}(p,n)$ to be true if the $p^{th}$ and the $p+1^{th}$ symbol of the string encoded by number $n$ is the first/second/third $\dagger$.
+	$$
+	\text{D1}(p,n) = \text{BIT}(p,n)\wedge \text{BIT}(p+1,n)\wedge(\forall i<p/2: \neg(\text{BIT}(2i-1,n)\wedge \text{BIT}(2i,n)))\\
+	$$
+	$$
+	\text{D2}(p,n) = \text{BIT}(p,n)\wedge \text{BIT}(p+1,n)\wedge(\exists d1,\forall d1/2<i<p/2: \text{D1}(d1,n)\wedge \neg(\text{BIT}(2i-1,n)\wedge \text{BIT}(2i,n)))
+	$$
+	$$
+	\text{D3}(p,n) = \text{BIT}(p,n)\wedge \text{BIT}(p+1,n)\wedge(\exists d2,\forall d2/2<i<p/2: \text{D2}(d1,n)\wedge \neg(\text{BIT}(2i-1,n)\wedge \text{BIT}(2i,n)))
+	$$
+	We let HEAD$(h,n)$ to be true if $h$ is the head position of the configuration encoded by $n$:
+
+	$
+	\text{HEAD}(h,n)=\exists d1,d2: \text{D1}(d1,n)\wedge\text{D2}(d2,n)\wedge(\forall d1/2+1<i<d2/2:\neg \text{BIT}(2i-1,n) \wedge \text{BIT}(2i,n))\wedge (h=d2/2-d1/2-1)
+	$
+	
+	We let STATE$(s,n)$ to be true if $s$ is the state of the configuration encoded by $n$:
+
+	$
+	\text{STATE}(h,n)=\exists d2,d3: \text{D2}(d2,n)\wedge\text{D3}(d3,n)\wedge(\forall d2/2+1<i<d3/2:\neg \text{BIT}(2i-1,n) \wedge \text{BIT}(2i,n))\wedge (h=d3/2-d2/2-1)
+	$
+	$
+	\text{INIT}_{M,x}(n)=\forall i\le |x|: \neg \text{BIT}(2i-1,n) \wedge (\text{BIT}(2i,n)\wedge x[i] \vee \neg \text{BIT}(2i,n)\wedge \neg x[i] ) \wedge \text{HEAD}(0,n) \wedge \text{STATE}(0,n)
+	$
+	\item HALT$_M(n)=\text{STATE}(1,n)$
+	\item NEXT$(n,m)=\exists d1,h1,h2,q1,q2: (\forall i<d1: \text{COMPARE}(n,m,i,i) \vee i=h1) \wedge \text{HEAD}(h1,n) \wedge\text{HEAD}(h2,m) \wedge\text{STATE}(s1,n) \wedge\text{STATE}(s2,m)\wedge <q1,BIT(2*h1,n)>\rightarrow <q2,BIT(2*h1,m),h2-h1>\in \delta$
+	\item VALID$_M(m,t)=\forall i<t-1:\text{NEXT}(x_i,x_{i+1})$
+	\item HALT$_{M,x}(t) = \exists m:\text{HALT}_M(x_t) \wedge \text{INIT}_{M,x}(x_1)\wedge\text{VALID}_M(m,t)$
+	\item The halting problem can be defined by 
+	$$
+	\exists t: \text{HALT}_{M,x}(t)
+	$$. If TRUE-EXP is computable, then halting problem is also computable.
+\end{enumerate}
+
+\end{solution}
+
+\begin{problem}{1.15}
+\end{problem}
+\begin{solution}
+\begin{enumerate}[(a)]
+	\item Given two arbitrary number $b,b'>1$, assume a TM $M$ accept $L_S^b$ in time $T(n^c)$. We can create a new TM $M'$. Given an input $L_S^{b'}$, $M'$ first transform $L_S^{b'}$ to $L_S^{b}$ and then do the same thing as TM $M$.
+	Since the transformation takes $O(n)$ time, $M'$ works in $O(T(n^c))$ and thus $L_S^{b'} \in $P.
+	\item The input size is $n+l+k$. It tasks $O(j)$ time to judge whether $j$ is prime and it tasks $O(n)$ time to judge where $j$ dividing $n$.
+	Therefore it takes $O((k-l)(j+n)<O((n+l+k)^2)$ to accept language UNARYFACTORING, i.e., UNARYFACTORING $\in$P.
+\end{enumerate}
+\end{solution}
+\end{document}

@@ -1,0 +1,81 @@
+\documentclass[12pt]{article}
+ \usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage{bm}
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+%If you want to title your bold things something different just make another thing exactly like this but replace "problem" with the name of the thing you want, like theorem or lemma or whatever
+ 
+\begin{document}
+ 
+%\renewcommand{\qedsymbol}{\filledbox}
+%Good resources for looking up how to do stuff:
+%Binary operators: http://www.access2science.com/latex/Binary.html
+%General help: http://en.wikibooks.org/wiki/LaTeX/Mathematics
+%Or just google stuff
+ 
+\title{Homework 1}
+\author{Due Date: March 19, 2017}
+\date{}
+
+\maketitle
+ 
+\begin{problem}{1}
+For parameter w, try to prove that logistic regression function $y=\frac{1}{1+e^{-(\bm{w^Tx}+b)}}$ is non-convex, but its logarithmic likelihood function $l(\bm{w})=\sum_{i=1}^m(-y_i(\bm{w^Tx_i}+b)+\ln(1+e^{\bm{w^Tx_i}+b}))$ is convex.
+\end{problem}
+ 
+\begin{problem}{2}
+Using the technique of Lagrange multipliers, show that minimization of the regularized error function\\
+\begin{align*}
+\frac{1}{2}\sum_{n=1}^N\{t_n-\bm{w^T\phi}(x_n)\}^2+\frac{\lambda}{2}\sum_{j=1}^M|w_j|^q
+\end{align*}
+is equivalent to minimizing the unregularized sum-of-squares error\\
+\begin{align*}
+E_D(\bm{w})=\frac{1}{2}\sum_{n=1}^N\{t_n-\bm{w^T\phi}(x_n)\}^2
+\end{align*}
+subject to the constraint $\sum_{j=1}^M|w_j|^q\le \eta$.Discuss the relationship between the parameters $\eta$ and $\lambda$.
+\end{problem} 
+
+\begin{problem}{3}
+Consider a data set in which each data point $t_n$ is associated with a weighting factor $r_n > 0$, so that the sum-of-squares error function becomes $$E_D(\mathbf{w}) = \frac{1}{2} \sum_{n=1}^N r_n \{t_n - \mathbf{w}^T\phi(\mathbf{x}_n)\}^2.$$ where $\phi(\mathbf{x}_n)$ is basis function.  Find an expression for the solution $\mathbf{w}^*$ that minimizes this error function. 
+\end{problem}
+
+\begin{problem}{4}
+Multinomial logistic regression is a classification method that generalizes logistic regression to multiclass problems. It has the form
+$$ p(y=c|\mathbf{x,W}) = \frac{exp(w_{c0} + \mathbf{w_c}^T\mathbf{x})}{\sum_{k=1}^C exp(w_{k0} + \mathbf{w_k}^T\mathbf{x})}, $$
+where C is the number of classes, and $\mathbf{W}$ is a C x (d+1) weight matrix, and d is the dimension of input vector $\mathbf{x}$. 
+Suppose we are given a set of training data $ \{\mathbf{x}_i, y_i\}_{i=1}^n $, and we want to learn a set of weight vectors that maximize the conditional likelihood of the output labels $ \{y_i\}_{i=1}^n $, given the input data $\{\mathbf{x}_i\}_{i=1}^n$ and $ \mathbf{W} $. That is, we want to solve the following optimization problem (assuming the data points are i.i.d).
+$$ \mathbf{W*} = \mathop{argmax} \limits_{\mathbf{W}} \prod_{i=1}^n P(y_i | \mathbf{x}_i, \mathbf{W})$$
+(a) Derive the conditional log-likelihood function for the multinomial logistic regression model. You may denote this function as l(W) \\ \\
+(b) Derive the gradient of l(W) with respect to the weight vector of class c ($\mathbf{w}_c$). That is, derive $\nabla_{\mathbf{w}_c} l(W)$. You may denote this function as gradient $g_c(W)$. Note: The gradient of a function $f(\mathbf{x})$ with respect to a vector $\mathbf{x}$ is also a vector, whose i-th entry is defined as $ \frac{\partial^2f(\mathbf{x})}{\partial{x_i}} $. \\ \\
+(c) Derive the block submatrix of the Hessian with respect to weight vector of class c ($\mathbf{w}_c$) and class $c'$ ($\mathbf{w}_{c'}$). You may denote this function as $H_{c,c'}(\mathbf{W})$. Note: The Hessian of a function $f(\mathbf{x})$ with respect to vector $\mathbf{x}$ is a matrix, whose \{i, j\}th entry is defined as $\frac{\partial^2f(\mathbf{x})}{\partial x_i \partial x_j}$. In this case, we are asking a block submatrix of Hessian of the conditional log-likelihood function, taken with respect to only two classes c and $c'$. The \{i,j\}th entry of the submatrix is defined as $\frac{\partial^2l(\mathbf{W})}{\partial w_{ci}\partial w_{c'j}}$.
+\end{problem}
+
+\begin{problem}{5}
+\emph{This is a programming assignment.}
+You are required to use linear regression to find the relation between \textbf{price} and \textbf{sqft\_living} in \textbf{train.csv}, and predict the house price based on \textbf{sqft\_living} in \textbf{test.csv}.
+Please implement the following three different methods to find the best fitting function:
+\begin{enumerate}
+\item Gradient Descent
+\item Newton's method
+\item Normal Equation
+\end{enumerate}
+
+After fitting a line to the training data, 
+\begin{enumerate}
+\item You are required to make a scatterplot of \textbf{price} vs \textbf{sqft\_living}, and plot your fitting line on this scatterplot.
+\item You are required to use your fitting line to predict the house price based on \textbf{sqft\_living} in \textbf{test.csv}, and compute the RMSE(root-mean-square error) of your prediction.
+\begin{equation}
+RMSE = \sqrt{	\frac{\sum_{i=1}^{N} \left(y_{i}^{predict} - y_{i}^{true}\right)^2}{N}}
+\end{equation}
+, where $N$ is the number of test samples, $y_{i}^{predict}$ is the prediction price for the $i^{th}$ sample, $y_{i}^{true}$ is the true price for the $i^{th}$ sample.
+\end{enumerate}
+
+In your report, you are required to compare the three methods with the help of three \textbf{plots}, three \textbf{fitting functions} and three \textbf{RMSEs}.
+\end{problem}
+
+\end{document}
